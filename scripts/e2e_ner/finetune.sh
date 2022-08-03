@@ -10,7 +10,7 @@ pretrained_ckpt=$3
 
 if [ -z "$pretrained_ckpt" ]
 then
-    save="save/asr/w2v2_base_${train_subset}"
+    save="save/e2e_ner/w2v2_base_${train_subset}"
     pretrained_ckpt="save/pretrained/wav2vec_small.pt"
     if ! [ -f $pretrained_ckpt ]; then
         mkdir -p save/pretrained
@@ -18,20 +18,12 @@ then
     fi
 else
     # pretrained ckpt: ASR trained on external data
-    pretrained_ckpt=$pretrained_ckpt
-    save="save/asr/w2v2_pre_asr_${train_subset}"
-fi
-
-save="save/e2e_ner/w2v2_base_${train_subset}"
-pretrained_ckpt="save/pretrained/wav2vec_small.pt"
-if ! [ -f $pretrained_ckpt ]; then
-    mkdir -p save/pretrained
-    wget https://dl.fbaipublicfiles.com/fairseq/wav2vec/wav2vec_small.pt -O $pretrained_ckpt
+    pretraining_data=` echo $pretrained_ckpt | cut -d "_" -f 4 `
+    save="save/e2e_ner/w2v2_pre_asr_${pretraining_data}_${train_subset}"
 fi
 
 mkdir -p $save
 tb_save=${save}/tb_logs
-
 
 data=`realpath $manifest_dir`
 pretrained_ckpt=`realpath $pretrained_ckpt`
@@ -44,6 +36,7 @@ elif [[ "$train_subset" == *"100h"* ]]; then
 elif [[ "$train_subset" == "fine-tune" ]]; then
     config=w2v2_base_ner_15h.yaml
 fi
+
 valid_subset=dev
 
 normalize=false

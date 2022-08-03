@@ -8,7 +8,7 @@ lm_wt=2
 ws=1
 
 # This saves the decoded text at save/e2e_ner/${model_name}/decode
-python -m  slue_toolkit.eval.eval_w2v eval_ner \
+python -m  slue_toolkit.eval.eval_w2v eval_ctc_model \
 --model save/e2e_ner/${model_name} \
 --data ${manifest_dir}/e2e_ner \
 --subset ${subset} \

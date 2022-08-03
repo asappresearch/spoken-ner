@@ -3,9 +3,9 @@ eval_set=$2
 train_label=$3
 eval_label=$4
 
-python slue_toolkit/text_ner/ner_deberta.py eval \
---data_dir manifest/slue-voxpopuli/nlp_ner \
---model_dir save/nlp_ner/${model_type}_${train_label} \
+python -m slue_toolkit.text_ner.ner_deberta eval \
+--data_dir manifest/text_ner \
+--model_dir save/text_ner/${model_type}_${train_label} \
 --model_type $model_type \
 --eval_asr False \
 --train_label $train_label \

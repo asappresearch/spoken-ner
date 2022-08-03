@@ -7,13 +7,6 @@ python -m slue_toolkit.prepare.prepare_voxpopuli create_manifest \
 --data_dir $slue_voxpopuli_dir \
 --manifest_dir $manifest_dir 
 
-# move files to a new directory; slightly different convention from slue-toolkit defaults
-for split in fine-tune dev; do
-	for label_type in raw combined; do
-		cp $manifest_dir/e2e_ner/${split}.tsv $manifest_dir/e2e_ner/${split}.${label_type}.tsv
-	done
-done
-
 mkdir -p $manifest_dir/asr
 for split in fine-tune dev; do
 	for ext in tsv wrd ltr; do
@@ -21,13 +14,7 @@ for split in fine-tune dev; do
 	done
 done
 
-mkdir -p $manifest_dir/text_ner
-mv $manifest_dir/nlp_ner/* $manifest_dir/text_ner/
-rm -r $manifest_dir/nlp_ner
-
-
-
-# prepare dictionary file
+# prepare dictionary files for ASR
 for label in ltr wrd; do
     python -m slue_toolkit.prepare.create_dict \
     $manifest_dir/asr/fine-tune.${label} \

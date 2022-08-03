@@ -3,7 +3,9 @@
 
 data_size=$1
 
+# Train E2E NER on pseudolabeled data
 subset_name=train_${data_size}_plabeled_e2e_ner
-. scripts/e2e_ner/ft_e2e_ner.sh manifest/e2e_ner/ $subset_name
+. scripts/e2e_ner/finetune.sh manifest/e2e_ner/ $subset_name
 
-. scripts/e2e_ner/eval_e2e_ner.sh $subset_name dev combined manifest/e2e_ner $subset_name
+# Evaluate
+. scripts/e2e_ner/eval.sh w2v2_base_$subset_name dev combined manifest vp_ner_${subset_name}/4

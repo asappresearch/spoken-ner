@@ -9,7 +9,7 @@ lm_wt=2
 ws=1
 
 # This saves the decoded text at save/e2e_ner/${pretrain_model}/decode
-python slue_toolkit/eval/eval_w2v.py eval \
+python -m slue_toolkit.eval.eval_w2v eval_ctc_model \
 --model save/e2e_ner/${model_name} \
 --data manifest/e2e_ner \
 --subset ${subset} \
@@ -19,9 +19,9 @@ python slue_toolkit/eval/eval_w2v.py eval \
 --word_score $ws
 
 # The evaluates the decoded utterances and saves it at save/e2e_ner/${pretrain_model}/metrics
-python slue_toolkit/eval/eval_e2e_ner.py eval_ner \
+python -m slue_toolkit.eval.eval_w2v_ner eval_ner \
 --model_dir save/e2e_ner/${pretrain_model} \
 --eval_set ${subset} \
 --eval_label ${eval_label} \
 --lm ${lm} \
---lm_sfx b${beam}-lw${lm_wt}-ws${ws}
+--save_results True

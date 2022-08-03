@@ -3,6 +3,9 @@
 
 data_size=$1
 
-. scripts/text_ner/ft_text_ner.sh manifest/text_ner train_${data_size}_plabeled_text_ner
+# Finetune text NER on the pseudolabeled data
+subset=train_${data_size}_plabeled_text_ner
+. scripts/text_ner/finetune.sh manifest/ $subset
 
-. scripts/pipeline/eval.sh fine-tune deberta_base_train_${data_size}_plabeled_text_ner dev combined t3
+# Evaluate pipeline model on NER
+. scripts/pipeline/eval.sh w2v2_base_fine-tune deberta_base_${subset}_raw dev combined t3/3

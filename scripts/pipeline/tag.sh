@@ -1,5 +1,5 @@
 asr_model_type=$1
-ner_model_type=$2
+ner_model_dir=$2
 eval_set=$3
 eval_label=$4
 lm=$5
@@ -19,16 +19,20 @@ python -m slue_toolkit.text_ner.reformat_pipeline prep_data \
 --asr_model_dir save/asr/${asr_model_type} \
 --out_data_dir manifest/slue-voxpopuli/text_ner \
 --eval_set $eval_set \
---lm $lm 
+--lm $lm
+
+eval_label="raw"
+model_type="deberta-base"
+train_label="raw"
 
 # Run inference using trained NER model
-python -m slue_toolkit.text_ner.ner_deberta eval \
---data_dir manifest/slue-voxpopuli/text_ner \
---model_dir save/text_ner/${ner_model_type}_fine-tune_raw \
---model_type $ner_model_type \
---eval_asr True \
---eval_subset $eval_set \
+python spoken_ner/text_ner/ner_tagger.py  \
+--data_dir manifest/text_ner \
+--model_dir $ner_model_dir \
+--model_type $model_type \
+--eval_asr False \
+--train_label $train_label \
 --eval_label $eval_label \
---lm $lm \
---asr_model_type $asr_model_type \
---save_results True
+--eval_subset $eval_set \
+--asr_model_type ${asr_model_type} \
+--lm $lm
